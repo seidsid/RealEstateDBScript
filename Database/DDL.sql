@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 28, 2023 at 11:26 AM
+-- Generation Time: Dec 31, 2023 at 07:52 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -74,7 +74,6 @@ CREATE TABLE `agent` (
   `languages` varchar(100) NOT NULL,
   `experience_since` datetime NOT NULL,
   `contact_id` varchar(36) NOT NULL,
-  `admin_id` varchar(36) NOT NULL,
   `account_id` varchar(36) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -122,7 +121,6 @@ CREATE TABLE `property` (
 
 CREATE TABLE `user` (
   `user_id` varchar(36) NOT NULL,
-  `property_id` varchar(36) NOT NULL,
   `contact_id` varchar(36) NOT NULL,
   `account_id` varchar(36) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -158,8 +156,7 @@ ALTER TABLE `admin`
 --
 ALTER TABLE `agent`
   ADD PRIMARY KEY (`agent_id`),
-  ADD KEY `contact_id` (`contact_id`,`admin_id`,`account_id`),
-  ADD KEY `admin_id` (`admin_id`),
+  ADD KEY `contact_id` (`contact_id`,`account_id`),
   ADD KEY `account_id` (`account_id`);
 
 --
@@ -182,8 +179,7 @@ ALTER TABLE `property`
 ALTER TABLE `user`
   ADD PRIMARY KEY (`user_id`),
   ADD KEY `contact_id` (`contact_id`),
-  ADD KEY `account_id` (`account_id`),
-  ADD KEY `user_ibfk_1` (`property_id`);
+  ADD KEY `account_id` (`account_id`);
 
 --
 -- Constraints for dumped tables
@@ -208,7 +204,6 @@ ALTER TABLE `admin`
 --
 ALTER TABLE `agent`
   ADD CONSTRAINT `agent_ibfk_1` FOREIGN KEY (`contact_id`) REFERENCES `contact` (`contact_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `agent_ibfk_2` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`admin_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `agent_ibfk_3` FOREIGN KEY (`account_id`) REFERENCES `account` (`account_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
@@ -222,7 +217,6 @@ ALTER TABLE `property`
 -- Constraints for table `user`
 --
 ALTER TABLE `user`
-  ADD CONSTRAINT `user_ibfk_1` FOREIGN KEY (`property_id`) REFERENCES `property` (`property_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `user_ibfk_2` FOREIGN KEY (`account_id`) REFERENCES `account` (`account_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `user_ibfk_3` FOREIGN KEY (`contact_id`) REFERENCES `contact` (`contact_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 COMMIT;
